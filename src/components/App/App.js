@@ -8,12 +8,12 @@ import FeedbacksList from '../FeedbacksList/FeedbacksList';
 import EditPost from '../EditPost/EditPost';
 
 export default function App() {
-    const [feedbacks, setFeedbacks] = useState([]);
+    const [feedbacks, setFeedbacks] = useState(JSON.parse(localStorage.getItem('feedbacks')) || []);
 
     const [editPostId, setEditPostId] = useState('');
 
     useEffect(() => {
-        console.log(feedbacks);
+        localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
     }, [feedbacks]);
 
     return (

@@ -16,7 +16,8 @@ import Box from '@material-ui/core/Box';
 import { Context } from '../context/context';
 
 export default function FormDialog({ dataToEdit }) {
-    dataToEdit = dataToEdit || {};
+    dataToEdit = dataToEdit || {}; //dataToEdit появится, когда будем вызывать FormDialog для редактирования поста
+
     const { setFeedbacks } = useContext(Context);
 
     const [open, setOpen] = useState(false);
@@ -38,8 +39,9 @@ export default function FormDialog({ dataToEdit }) {
 
         setOpen(false);
 
+        //если FormDialog вызвался для редактирования поста, то в стейте feedbacks из app.js должен поменяться только тот пост, который хотим редактировать
+        //этот пост найдем накой проверкой feedback.id === dataToEdit.id, где dataToEdit.id - айди поста, на который нажали
         if ('id' in dataToEdit) {
-            console.log(1);
             setFeedbacks((feedbacks) => {
                 return feedbacks.map((feedback) =>
                     feedback.id === dataToEdit.id ? { ...feedback, title, description, rating } : feedback
@@ -49,19 +51,9 @@ export default function FormDialog({ dataToEdit }) {
         }
 
         setFeedbacks((feedbacks) => {
-            return [
-                ...feedbacks,
-                {
-                    id: +Date.now(),
-                    title: title,
-                    description: description,
-                    rating: rating,
-                },
-            ];
+            return [...feedbacks, { id: +Date.now(), title, description, rating }];
         });
     };
-
-    console.log('dataToEdit.id', dataToEdit.id);
 
     return (
         <div>

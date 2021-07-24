@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Context } from '../context/context';
 
 export default function FeedbackItem({ feedback: { id, title, description, rating } }) {
-    const { setEditPostId } = useContext(Context);
+    const { setEditPostId } = useContext(Context); //функция setEditPostId необходима для изменения в главном стейте айди объекта, который в данный момент собираемся редактировать
 
     return (
         <>
