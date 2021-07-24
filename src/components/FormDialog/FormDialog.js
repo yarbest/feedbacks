@@ -16,14 +16,14 @@ import Box from '@material-ui/core/Box';
 import { Context } from '../context/context';
 
 export default function FormDialog({ dataToEdit }) {
-    dataToEdit = dataToEdit || {}; //dataToEdit появится, когда будем вызывать FormDialog для редактирования поста
+    dataToEdit = dataToEdit || {}; //dataToEdit появится, когда будем вызывать FormDialog для редактирования поста, тут будут храниться старые данные поста, который будем редактировать
 
     const { setFeedbacks } = useContext(Context);
 
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState(dataToEdit.title || '');
     const [description, setDescription] = useState(dataToEdit.description || '');
-    const [rating, setRating] = useState(description.rating || 2);
+    const [rating, setRating] = useState(dataToEdit.rating || 2);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -42,12 +42,10 @@ export default function FormDialog({ dataToEdit }) {
         //если FormDialog вызвался для редактирования поста, то в стейте feedbacks из app.js должен поменяться только тот пост, который хотим редактировать
         //этот пост найдем накой проверкой feedback.id === dataToEdit.id, где dataToEdit.id - айди поста, на который нажали
         if ('id' in dataToEdit) {
-            setFeedbacks((feedbacks) => {
-                return feedbacks.map((feedback) =>
-                    feedback.id === dataToEdit.id ? { ...feedback, title, description, rating } : feedback
-                );
-            });
-            return;
+            setFeedbacks((feedbacks) =>
+                feedbacks.map((feedback) => (feedback.id === dataToEdit.id ? { ...feedback, title, description, rating } : feedback))
+            );
+            return; //после этого нужно выйти, иниче добавится еще 1 пост
         }
 
         setFeedbacks((feedbacks) => {
