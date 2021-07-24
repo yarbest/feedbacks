@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import Rating from '@material-ui/lab/Rating';
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
@@ -16,15 +17,18 @@ export default function FeedbackItem({ feedback: { id, title, description, ratin
 
     return (
         <>
-            <Grid container alignItems="center" style={{ paddingRight: '40px' }}>
+            <Grid container alignItems="center">
                 <span>Rating:</span>
                 <Rating name="read-only" value={rating} readOnly />
-                <p style={{ marginLeft: '20px' }}>Title: {title}</p>
-                <Link onClick={() => setEditPostId(id)} to={`/post/${id}`} style={{ marginLeft: 'auto', marginRight: '20px' }}>
-                    <EditIcon color="primary" />
-                </Link>
+                <Box ml="20px">Title: {title}</Box>
 
-                <DeleteIcon onClick={handleDelete} style={{ color: 'red' }} />
+                <Box ml="auto" mr="40px">
+                    <Link onClick={() => setEditPostId(id)} to={`/post/${id}`} style={{ marginRight: '20px' }}>
+                        {/*При нажатии на кнопку редактирования поста, нужно в стейте из App.js поменять айди текущего поста для редактирования и этот же айди использовать в url*/}
+                        <EditIcon color="success" />
+                    </Link>
+                    <DeleteIcon onClick={handleDelete} color="secondary" />
+                </Box>
             </Grid>
         </>
     );

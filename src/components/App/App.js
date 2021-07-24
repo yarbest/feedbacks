@@ -20,6 +20,7 @@ export default function App() {
             <Switch>
                 <Route path={`/post/${editPostId}`}>
                     <Context.Provider value={{ setFeedbacks }}>
+                        {/*Сюда отправляю контекст, так как в EditPost вызывается FormDialog и там должен меняться стейт feedbacks */}
                         <EditPost feedback={feedbacks.find((feedback) => feedback.id === editPostId)} />
                     </Context.Provider>
                 </Route>

@@ -21,7 +21,7 @@ export default function FormDialog({ dataToEdit }) {
     const { setFeedbacks } = useContext(Context);
 
     const [open, setOpen] = useState(false);
-    const [title, setTitle] = useState(dataToEdit.title || '');
+    const [title, setTitle] = useState(dataToEdit.title || ''); //если данные поста для редактирования не пришли, значит форма используется для создания, а не для редактирования, значит ставим пустую строку
     const [description, setDescription] = useState(dataToEdit.description || '');
     const [rating, setRating] = useState(dataToEdit.rating || 2);
 
@@ -40,12 +40,12 @@ export default function FormDialog({ dataToEdit }) {
         setOpen(false);
 
         //если FormDialog вызвался для редактирования поста, то в стейте feedbacks из app.js должен поменяться только тот пост, который хотим редактировать
-        //этот пост найдем накой проверкой feedback.id === dataToEdit.id, где dataToEdit.id - айди поста, на который нажали
+        //этот пост найдем проверкой feedback.id === dataToEdit.id, где dataToEdit.id - айди поста, на который нажали
         if ('id' in dataToEdit) {
             setFeedbacks((feedbacks) =>
                 feedbacks.map((feedback) => (feedback.id === dataToEdit.id ? { ...feedback, title, description, rating } : feedback))
             );
-            return; //после этого нужно выйти, иниче добавится еще 1 пост
+            return; //после этого нужно выйти, иначе добавится еще 1 пост
         }
 
         setFeedbacks((feedbacks) => {
@@ -67,7 +67,7 @@ export default function FormDialog({ dataToEdit }) {
                     <Box component="fieldset" borderColor="transparent">
                         <Typography component="legend">Rating</Typography>
                         <Rating
-                            name="simple-controlled"
+                            name="rating"
                             value={rating}
                             onChange={(event, newRating) => {
                                 setRating(newRating);
@@ -81,7 +81,7 @@ export default function FormDialog({ dataToEdit }) {
                             value={title}
                             autoFocus
                             margin="dense"
-                            id="name"
+                            name="title"
                             label="Title"
                             type="text"
                             fullWidth
@@ -95,6 +95,7 @@ export default function FormDialog({ dataToEdit }) {
                             minRows={3}
                             maxRows={5}
                             placeholder="Description"
+                            name="description"
                             style={{ width: '100%', resize: 'none' }}
                         />
                     </Box>
