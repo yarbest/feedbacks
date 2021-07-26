@@ -33,3 +33,7 @@ export default function App() {
         </Router>
     );
 }
+//этот путь path={`/post/${editPostId}`} можно было заменить на path={'/post/:idEditPost'}
+//затем внутри EditPost написать const {idEditPost} = useParams()
+//этот idEditPost возьмется из url и дальше передастся в FormDialog, чтобы понять какой пост редактировать
+//это можно было бы сделать, если бы у нас не было стейта editPostId

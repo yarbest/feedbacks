@@ -25,7 +25,7 @@ export default function FeedbackItem({ feedback: { id, title, description, ratin
                 <Box ml="auto" mr="40px">
                     <Link onClick={() => setEditPostId(id)} to={`/post/${id}`} style={{ marginRight: '20px' }}>
                         {/*При нажатии на кнопку редактирования поста, нужно в стейте из App.js поменять айди текущего поста для редактирования и этот же айди использовать в url*/}
-                        <EditIcon color="success" />
+                        <EditIcon />
                     </Link>
                     <DeleteIcon onClick={handleDelete} color="secondary" />
                 </Box>
