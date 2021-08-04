@@ -9,27 +9,23 @@ import { Link } from 'react-router-dom';
 import { Context } from '../context/context';
 
 export default function FeedbackItem({ feedback: { id, title, description, rating } }) {
-    const { setFeedbacks, setEditPostId } = useContext(Context); //функция setEditPostId необходима для изменения в главном стейте айди объекта, который в данный момент собираемся редактировать
+    const { dispatch } = useContext(Context);
 
-    const handleDelete = () => {
-        setFeedbacks((feedbacks) => feedbacks.filter((feedback) => feedback.id !== id));
-    };
+    const handleDelete = () => dispatch({ type: 'DELETE_FEEDBACK', payload: id });
+    const handleEdit = () => dispatch({ type: 'SET_ID', payload: id });
 
     return (
-        <>
-            <Grid container alignItems="center">
-                <span>Rating:</span>
-                <Rating name="read-only" value={rating} readOnly />
-                <Box ml="20px">Title: {title}</Box>
+        <Grid container alignItems="center">
+            <span>Rating:</span>
+            <Rating name="read-only" value={rating} readOnly />
+            <Box ml="20px">Title: {title}</Box>
 
-                <Box ml="auto" mr="40px">
-                    <Link onClick={() => setEditPostId(id)} to={`/post/${id}`} style={{ marginRight: '20px' }}>
-                        {/*При нажатии на кнопку редактирования поста, нужно в стейте из App.js поменять айди текущего поста для редактирования и этот же айди использовать в url*/}
-                        <EditIcon />
-                    </Link>
-                    <DeleteIcon onClick={handleDelete} color="secondary" />
-                </Box>
-            </Grid>
-        </>
+            <Box ml="auto" mr="40px">
+                <Link onClick={handleEdit} to={`/post/${id}`} style={{ marginRight: '20px' }}>
+                    <EditIcon />
+                </Link>
+                <DeleteIcon onClick={handleDelete} color="secondary" />
+            </Box>
+        </Grid>
     );
 }

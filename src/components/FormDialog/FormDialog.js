@@ -6,7 +6,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Grid from '@material-ui/core/Grid';
 
 import Rating from '@material-ui/lab/Rating';
@@ -15,23 +14,18 @@ import Box from '@material-ui/core/Box';
 
 import { Context } from '../context/context';
 
-export default function FormDialog({ dataToEdit }) {
-    dataToEdit = dataToEdit || {}; //dataToEdit появится, когда будем вызывать FormDialog для редактирования поста, тут будут храниться старые данные поста, который будем редактировать
+export default function FormDialog({ values = { title: '', description: '', rating: 2 } }) {
+    //values появится, когда будем вызывать FormDialog для редактирования поста, тут будут храниться старые данные поста, который будем редактировать, главное не ставить данные по умолчанию для id
 
-    const { setFeedbacks } = useContext(Context);
+    const { dispatch } = useContext(Context);
 
+    const [feedback, setFeedback] = useState(values); //перенес title, description и rating в один объект
+    const { title, description, rating } = feedback;
+
+    //От Material UI
     const [open, setOpen] = useState(false);
-    const [title, setTitle] = useState(dataToEdit.title || ''); //если данные поста для редактирования не пришли, значит форма используется для создания, а не для редактирования, значит ставим пустую строку
-    const [description, setDescription] = useState(dataToEdit.description || '');
-    const [rating, setRating] = useState(dataToEdit.rating || 2);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const handleClickOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     const handleSend = (e) => {
         if (title.trim() === '' || description.trim() === '') return;
@@ -39,29 +33,26 @@ export default function FormDialog({ dataToEdit }) {
 
         setOpen(false);
 
-        //если FormDialog вызвался для редактирования поста, то в стейте feedbacks из app.js должен поменяться только тот пост, который хотим редактировать
-        //этот пост найдем проверкой feedback.id === dataToEdit.id, где dataToEdit.id - айди поста, на который нажали
-        if ('id' in dataToEdit) {
-            setFeedbacks((feedbacks) =>
-                feedbacks.map((feedback) => (feedback.id === dataToEdit.id ? { ...feedback, title, description, rating } : feedback))
-            );
-            return; //после этого нужно выйти, иначе добавится еще 1 пост
+        if ('id' in values) {
+            dispatch({ type: 'EDIT_FEEDBACK', payload: { ...feedback, id: values.id } });
+        } else {
+            dispatch({ type: 'ADD_FEEDBACK', payload: { ...feedback, id: +Date.now() } });
         }
-
-        setFeedbacks((feedbacks) => {
-            return [...feedbacks, { id: +Date.now(), title, description, rating }];
-        });
     };
+
+    const handleTitleChange = (e) => setFeedback((state) => ({ ...state, title: e.target.value }));
+    const handleDescChange = (e) => setFeedback((state) => ({ ...state, description: e.target.value }));
+    const handleRatingChange = (rating) => setFeedback((state) => ({ ...state, rating }));
 
     return (
         <div>
             <Grid container justifyContent="center">
                 <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                    {dataToEdit.id ? 'Edit feedback' : 'Send feedback'}
+                    {values.id ? 'Edit feedback' : 'Send feedback'}
                 </Button>
             </Grid>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">{dataToEdit.id ? 'Edit feedback' : 'Send feedback'}</DialogTitle>
+                <DialogTitle id="form-dialog-title">{values.id ? 'Edit feedback' : 'Send feedback'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>To leave your feedback, please enter title, rating and description here.</DialogContentText>
                     <Box component="fieldset" borderColor="transparent">
@@ -69,14 +60,15 @@ export default function FormDialog({ dataToEdit }) {
                         <Rating
                             name="rating"
                             value={rating}
-                            onChange={(event, newRating) => {
-                                setRating(newRating);
+                            onChange={(event, rating) => {
+                                handleRatingChange(rating);
                             }}
                         />
                     </Box>
                     <Box component="fieldset" mb={2} borderColor="transparent">
                         <TextField
-                            onChange={(e) => setTitle(e.target.value)}
+                            // onChange={(e) => setTitle(e.target.value)}//было
+                            onChange={handleTitleChange}
                             onKeyPress={(e) => handleSend(e)}
                             value={title}
                             autoFocus
@@ -88,15 +80,14 @@ export default function FormDialog({ dataToEdit }) {
                         />
                     </Box>
                     <Box component="fieldset" mb={2} borderColor="transparent">
-                        <TextareaAutosize
-                            onChange={(e) => setDescription(e.target.value)}
+                        <TextField
+                            // onChange={(e) => setDescription(e.target.value)}//было
+                            onChange={handleDescChange}
                             onKeyPress={(e) => handleSend(e)}
                             value={description}
-                            minRows={3}
-                            maxRows={5}
+                            fullWidth
                             placeholder="Description"
                             name="description"
-                            style={{ width: '100%', resize: 'none' }}
                         />
                     </Box>
                 </DialogContent>
