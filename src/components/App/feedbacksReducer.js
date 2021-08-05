@@ -24,12 +24,6 @@ export default function feedbacksReducer(state = ititialState, action) {
                 //...feedback написано для того, если вдруг мы не все данные собираемся менять, которые находятся в editedData и нужно оставить старые
             };
 
-        case 'SET_ID':
-            return {
-                ...state,
-                editPostId: action.payload,
-            };
-
         default:
             return state;
     }
