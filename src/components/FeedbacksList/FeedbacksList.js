@@ -8,6 +8,10 @@ import FeedbackItem from '../FeedbackItem/FeedbackItem';
 export default function FeedbacksList() {
     const { feedbacks } = useContext(Context);
 
+    const listItems = feedbacks.map((feedback) => {
+        return <FeedbackItem key={feedback.id} feedback={feedback} />;
+    });
+
     return (
         <>
             <FormDialog />
@@ -16,9 +20,7 @@ export default function FeedbacksList() {
                 <Typography color="primary" gutterBottom>
                     <span>Feedbacks:</span>
                 </Typography>
-                {feedbacks.map((feedback) => {
-                    return <FeedbackItem key={feedback.id} feedback={feedback} />;
-                })}
+                {listItems}
             </ul>
         </>
     );
