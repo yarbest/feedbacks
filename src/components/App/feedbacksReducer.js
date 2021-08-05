@@ -1,6 +1,5 @@
 const ititialState = {
     feedbacks: [],
-    editPostId: '',
 };
 
 export default function feedbacksReducer(state = ititialState, action) {

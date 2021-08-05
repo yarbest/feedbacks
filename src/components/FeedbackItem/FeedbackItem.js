@@ -12,7 +12,6 @@ export default function FeedbackItem({ feedback: { id, title, description, ratin
     const { dispatch } = useContext(Context);
 
     const handleDelete = () => dispatch({ type: 'DELETE_FEEDBACK', payload: id });
-    const handleEdit = () => dispatch({ type: 'SET_ID', payload: id });
 
     return (
         <Grid container alignItems="center">
@@ -21,7 +20,7 @@ export default function FeedbackItem({ feedback: { id, title, description, ratin
             <Box ml="20px">Title: {title}</Box>
 
             <Box ml="auto" mr="40px">
-                <Link onClick={handleEdit} to={`/post/${id}`} style={{ marginRight: '20px' }}>
+                <Link to={`/post/${id}`} style={{ marginRight: '20px' }}>
                     <EditIcon />
                 </Link>
                 <DeleteIcon onClick={handleDelete} color="secondary" />

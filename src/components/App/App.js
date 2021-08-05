@@ -9,17 +9,15 @@ import feedbacksReducer from './feedbacksReducer';
 export default function App() {
     const [state, dispatch] = useReducer(feedbacksReducer, {
         feedbacks: JSON.parse(localStorage.getItem('feedbacks')) || [],
-        editPostId: JSON.parse(localStorage.getItem('editPostId')) || '',
     });
-    const { feedbacks, editPostId } = state;
+    const { feedbacks } = state;
 
     useEffect(() => {
         localStorage.setItem('feedbacks', JSON.stringify(state.feedbacks));
-        localStorage.setItem('editPostId', JSON.stringify(state.editPostId));
     }, [state]);
 
     return (
-        <Context.Provider value={{ feedbacks, editPostId, dispatch }}>
+        <Context.Provider value={{ feedbacks, dispatch }}>
             <Router>
                 <Switch>
                     <Route path={'/post/:editPostId'} component={EditPost}></Route>

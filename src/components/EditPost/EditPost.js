@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import Rating from '@material-ui/lab/Rating';
 import Grid from '@material-ui/core/Grid';
@@ -10,11 +10,12 @@ import { Context } from '../context/context';
 import FormDialog from '../FormDialog/FormDialog';
 
 export default function EditPost() {
-    const { feedbacks, editPostId } = useContext(Context);
+    const { feedbacks } = useContext(Context);
+    const { editPostId } = useParams();
 
     const feedback = feedbacks.find((item) => {
         console.log('find');
-        return item.id === editPostId;
+        return item.id === +editPostId; //editPostId из url берется как строка
     });
 
     //Использование useMemo принесло проблемы, когда я редактирую пост, то состояние меняется,
