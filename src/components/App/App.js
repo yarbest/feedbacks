@@ -8,8 +8,8 @@ import feedbacksReducer from './feedbacksReducer';
 
 export default function App() {
     const [state, dispatch] = useReducer(feedbacksReducer, {
-        feedbacks: JSON.parse(localStorage.getItem('feedbacks') || []),
-        editPostId: JSON.parse(localStorage.getItem('editPostId') || ''),
+        feedbacks: JSON.parse(localStorage.getItem('feedbacks')) || [],
+        editPostId: JSON.parse(localStorage.getItem('editPostId')) || '',
     });
     const { feedbacks, editPostId } = state;
 

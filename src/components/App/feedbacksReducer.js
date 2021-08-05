@@ -18,10 +18,11 @@ export default function feedbacksReducer(state = ititialState, action) {
             };
 
         case 'EDIT_FEEDBACK':
-            const { id, title, rating, description } = action.payload;
+            const { id, ...editedData } = action.payload;
             return {
                 ...state,
-                feedbacks: state.feedbacks.map((feedback) => (feedback.id === id ? { ...feedback, title, description, rating } : feedback)),
+                feedbacks: state.feedbacks.map((feedback) => (feedback.id === id ? { ...feedback, ...editedData } : feedback)),
+                //...feedback написано для того, если вдруг мы не все данные собираемся менять, которые находятся в editedData и нужно оставить старые
             };
 
         case 'SET_ID':

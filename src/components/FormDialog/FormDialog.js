@@ -15,11 +15,11 @@ import Box from '@material-ui/core/Box';
 import { Context } from '../context/context';
 
 export default function FormDialog({ values = { title: '', description: '', rating: 2 } }) {
-    //values появится, когда будем вызывать FormDialog для редактирования поста, тут будут храниться старые данные поста, который будем редактировать, главное не ставить данные по умолчанию для id
+    //values появится, когда будем вызывать FormDialog для редактирования поста, тут будут храниться старые данные поста, который будем редактировать, главное не ставить данные по умолчанию для id, иначе условие в handleSend сломается
 
     const { dispatch } = useContext(Context);
 
-    const [feedback, setFeedback] = useState(values); //перенес title, description и rating в один объект
+    const [feedback, setFeedback] = useState(values); //feedback - локальный state, в котром лежит title, description, rating, его будем отправлять через reducer в стейт из App.js
     const { title, description, rating } = feedback;
 
     //От Material UI
@@ -40,6 +40,7 @@ export default function FormDialog({ values = { title: '', description: '', rati
         }
     };
 
+    //меняем локальный state
     const handleTitleChange = (e) => setFeedback((state) => ({ ...state, title: e.target.value }));
     const handleDescChange = (e) => setFeedback((state) => ({ ...state, description: e.target.value }));
     const handleRatingChange = (rating) => setFeedback((state) => ({ ...state, rating }));
@@ -67,7 +68,6 @@ export default function FormDialog({ values = { title: '', description: '', rati
                     </Box>
                     <Box component="fieldset" mb={2} borderColor="transparent">
                         <TextField
-                            // onChange={(e) => setTitle(e.target.value)}//было
                             onChange={handleTitleChange}
                             onKeyPress={(e) => handleSend(e)}
                             value={title}
@@ -81,12 +81,11 @@ export default function FormDialog({ values = { title: '', description: '', rati
                     </Box>
                     <Box component="fieldset" mb={2} borderColor="transparent">
                         <TextField
-                            // onChange={(e) => setDescription(e.target.value)}//было
                             onChange={handleDescChange}
                             onKeyPress={(e) => handleSend(e)}
                             value={description}
                             fullWidth
-                            placeholder="Description"
+                            label="Description"
                             name="description"
                         />
                     </Box>
