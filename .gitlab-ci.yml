@@ -1,0 +1,4 @@
+include:
+    - project: 'intensive-react-2021-july/intensive'
+      ref: main
+      file: 'configs/gitlab-ci.yml'
